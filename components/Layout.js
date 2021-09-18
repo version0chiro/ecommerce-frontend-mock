@@ -1,9 +1,15 @@
 import React from "react";
 import Head from "next/head";
-
+import NextLink from "next/link";
 import useStyles from "../utils/styles";
 
-import { AppBar, Container, Toolbar, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  Container,
+  Link,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 export default function Layout({ children }) {
   const classes = useStyles();
   return (
@@ -12,9 +18,22 @@ export default function Layout({ children }) {
         {" "}
         <title>Mock App</title>
       </Head>
-      <AppBar postion="static" className={classes.navebar}>
+      <AppBar position="static" className={classes.navebar}>
         <Toolbar>
-          <Typography>Mock Website</Typography>
+          <NextLink href="/" passHref>
+            <Link>
+              <Typography className={classes.brand}>Cloth-Azon</Typography>
+            </Link>
+          </NextLink>
+          <div className={classes.grow}></div>
+          <div>
+            <NextLink href="/cart">
+              <Link>Cart</Link>
+            </NextLink>
+            <NextLink href="/login">
+              <Link>Login</Link>
+            </NextLink>
+          </div>
         </Toolbar>
       </AppBar>
 
