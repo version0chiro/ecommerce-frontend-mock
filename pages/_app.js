@@ -1,9 +1,11 @@
-import { useEffect } from "react";
-import "../styles/globals.css";
+// import '../styles/globals.css'
+import { useEffect } from 'react';
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    const jssStyles = document.querySelector("#jss-server-side");
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
@@ -11,4 +13,4 @@ function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
 }
 
-export default MyApp;
+export default MyApp

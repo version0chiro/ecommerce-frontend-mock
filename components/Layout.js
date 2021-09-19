@@ -27,10 +27,10 @@ export default function Layout({ children }) {
           </NextLink>
           <div className={classes.grow}></div>
           <div>
-            <NextLink href="/cart">
+            <NextLink href="/cart" passHref>
               <Link>Cart</Link>
             </NextLink>
-            <NextLink href="/login">
+            <NextLink href="/login" passHref>
               <Link>Login</Link>
             </NextLink>
           </div>
