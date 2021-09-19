@@ -10,13 +10,14 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-export default function Layout({ children }) {
+export default function Layout({ title, children, description }) {
   const classes = useStyles();
   return (
     <div>
       <Head>
         {" "}
-        <title>Mock App</title>
+        <title>{title ? `${title} - Mock App` : "Mock App"}</title>
+        {description && <meta name="description" content={description} />}
       </Head>
       <AppBar position="static" className={classes.navebar}>
         <Toolbar>
