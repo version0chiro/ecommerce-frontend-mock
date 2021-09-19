@@ -1,6 +1,4 @@
-import { useRouter } from "next/dist/client/router";
 import React from "react";
-import data from "../../utils/data";
 import Layout from "../../components/Layout";
 import NextLink from "next/link";
 import Image from "next/image";
