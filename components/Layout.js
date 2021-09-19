@@ -12,15 +12,15 @@ import {
   Typography,
   ThemeProvider,
   CssBaseline,
+  Switch,
 } from "@material-ui/core";
 
 import { Store } from "../utils/Store";
 
 export default function Layout({ title, children, description }) {
-
   // eslint-disable-next-line no-unused-vars
-  const {state, dispatch} = useContext(Store);
-  const {darkMode} = state;
+  const { state, dispatch } = useContext(Store);
+  const { darkMode } = state;
   // const  darkMode  = state;
 
   const theme = createMuiTheme({
@@ -50,6 +50,9 @@ export default function Layout({ title, children, description }) {
     },
   });
   const classes = useStyles();
+  const darkModeChangeHandler = () => {
+    dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
+  };
   return (
     <div>
       <Head>
@@ -68,6 +71,10 @@ export default function Layout({ title, children, description }) {
             </NextLink>
             <div className={classes.grow}></div>
             <div>
+              <Switch
+                checked={darkMode}
+                onChange={darkModeChangeHandler}
+              ></Switch>
               <NextLink href="/cart" passHref>
                 <Link>Cart</Link>
               </NextLink>
