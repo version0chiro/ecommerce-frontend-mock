@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 
 import { Store } from "../utils/Store";
+import Cookies from "js-cookie";
 
 export default function Layout({ title, children, description }) {
   // eslint-disable-next-line no-unused-vars
@@ -52,6 +53,8 @@ export default function Layout({ title, children, description }) {
   const classes = useStyles();
   const darkModeChangeHandler = () => {
     dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
+    const newDarkMode = !darkMode;
+    Cookies.set("darkMode", newDarkMode ? "ON" : "OFF");
   };
   return (
     <div>
