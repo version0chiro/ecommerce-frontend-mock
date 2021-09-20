@@ -1,43 +1,40 @@
 import React, { useContext } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
-import useStyles from "../utils/styles";
-
 import {
   AppBar,
-  Container,
-  createMuiTheme,
-  Link,
   Toolbar,
   Typography,
+  Container,
+  Link,
+  createMuiTheme,
   ThemeProvider,
   CssBaseline,
   Switch,
+  Button,
+  Badge,
 } from "@material-ui/core";
 
+import Toggle from "react-toggle";
+
+import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 
-export default function Layout({ title, children, description }) {
-  // eslint-disable-next-line no-unused-vars
+export default function Layout({ title, description, children }) {
   const { state, dispatch } = useContext(Store);
-  const { darkMode } = state;
-  // const  darkMode  = state;
-
+  const { darkMode, cart } = state;
   const theme = createMuiTheme({
     typography: {
       h1: {
-        fontSize: "3rem",
+        fontSize: "1.6rem",
         fontWeight: 400,
         margin: "1rem 0",
       },
       h2: {
-        fontSize: "2rem",
+        fontSize: "1.4rem",
         fontWeight: 400,
         margin: "1rem 0",
-      },
-      body1: {
-        fontWeight: "normal",
       },
     },
     palette: {
@@ -59,27 +56,42 @@ export default function Layout({ title, children, description }) {
   return (
     <div>
       <Head>
-        {" "}
-        <title>{title ? `${title} - Mock App` : "Mock App"}</title>
-        {description && <meta name="description" content={description} />}
+        <title>{title ? `${title} - Next Amazona` : "Next Amazona"}</title>
+        {description && <meta name="description" content={description}></meta>}
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar position="static" className={classes.navebar}>
+        <AppBar position="static" className={classes.navbar}>
           <Toolbar>
             <NextLink href="/" passHref>
               <Link>
-                <Typography className={classes.brand}>Cloth-Azon</Typography>
+                <Typography className={classes.brand}>amazona</Typography>
               </Link>
             </NextLink>
             <div className={classes.grow}></div>
             <div>
-              <Switch
-                checked={darkMode}
-                onChange={darkModeChangeHandler}
-              ></Switch>
+              <Button
+                onClick={darkModeChangeHandler}
+                color="secondary"
+                // variant={darkMode ? "outlined" : "contained"}
+              >
+                Switch Dark Mode
+              </Button>
+
+              {/* <Switch checked={darkMode} onChange={darkModeChangeHandler} /> */}
               <NextLink href="/cart" passHref>
-                <Link>Cart</Link>
+                <Link>
+                  {cart.cartItems.length > 0 ? (
+                    <Badge
+                      color="secondary"
+                      badgeContent={cart.cartItems.length}
+                    >
+                      Cart
+                    </Badge>
+                  ) : (
+                    "Cart"
+                  )}
+                </Link>
               </NextLink>
               <NextLink href="/login" passHref>
                 <Link>Login</Link>
@@ -87,11 +99,9 @@ export default function Layout({ title, children, description }) {
             </div>
           </Toolbar>
         </AppBar>
-
         <Container className={classes.main}>{children}</Container>
-
         <footer className={classes.footer}>
-          <Typography>All rights reserved. Mock Website</Typography>
+          <Typography>All rights reserved. Next Amazona.</Typography>
         </footer>
       </ThemeProvider>
     </div>

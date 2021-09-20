@@ -1,6 +1,8 @@
 // import '../styles/globals.css'
 import { useEffect } from "react";
 import "../styles/globals.css";
+import "react-toggle/style.css"
+
 import { StoreProvider } from "../utils/Store";
 
 function MyApp({ Component, pageProps }) {
