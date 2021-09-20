@@ -47,7 +47,11 @@ function CartScreen() {
       </Typography>
       {cartItems.length === 0 ? (
         <div>
-          Cart is empty. <NextLink href="/"> Go Shopping </NextLink>
+          Cart is empty. <NextLink href="/" passHref> 
+          <Link>
+          Go Shopping 
+          </Link>
+          </NextLink>
         </div>
       ) : (
         <Grid container spacing={1}>
