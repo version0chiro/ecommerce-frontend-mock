@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
+import dynamic from "next/dynamic";
 import {
   AppBar,
   Toolbar,
@@ -12,14 +13,14 @@ import {
   CssBaseline,
   Button,
   Badge,
+  Switch,
 } from "@material-ui/core";
-
 
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 
-export default function Layout({ title, description, children }) {
+function Layout({ title, description, children }) {
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart } = state;
   const theme = createMuiTheme({
@@ -68,6 +69,7 @@ export default function Layout({ title, description, children }) {
             </NextLink>
             <div className={classes.grow}></div>
             <div>
+              <Switch checked={darkMode} onChange={darkModeChangeHandler} />
               <Button
                 onClick={darkModeChangeHandler}
                 color="secondary"
@@ -105,3 +107,5 @@ export default function Layout({ title, description, children }) {
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(Layout), { ssr: false });
