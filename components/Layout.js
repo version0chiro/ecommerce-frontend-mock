@@ -10,12 +10,10 @@ import {
   createMuiTheme,
   ThemeProvider,
   CssBaseline,
-  Switch,
   Button,
   Badge,
 } from "@material-ui/core";
 
-import Toggle from "react-toggle";
 
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
