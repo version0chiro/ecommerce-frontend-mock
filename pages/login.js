@@ -6,7 +6,7 @@ import {
   TextField,
   Link,
 } from "@material-ui/core";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
 import NextLink from "next/link";
@@ -21,9 +21,11 @@ export default function Login() {
   const { redirect } = router.query;
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
-  if (userInfo) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (userInfo) {
+      router.push("/");
+    }
+  }, []);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const classes = useStyles();
@@ -35,7 +37,8 @@ export default function Login() {
         password,
       });
       dispatch({ type: "USER_LOGIN", payload: data });
-      Cookies.set("userInfo", data);
+      console.log(typeof data, JSON.stringify(data));
+      Cookies.set("userInfo", JSON.stringify(data));
       router.push(redirect || "/");
     } catch (err) {
       alert(err.message);

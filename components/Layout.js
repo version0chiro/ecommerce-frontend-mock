@@ -21,8 +21,10 @@ import {
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 function Layout({ title, description, children }) {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -33,6 +35,7 @@ function Layout({ title, description, children }) {
   };
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart, userInfo } = state;
+  console.log(userInfo);
   const theme = createMuiTheme({
     typography: {
       h1: {
@@ -61,6 +64,13 @@ function Layout({ title, description, children }) {
     dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
     const newDarkMode = !darkMode;
     Cookies.set("darkMode", newDarkMode ? "ON" : "OFF");
+  };
+  const logoutClickHandler = () => {
+    setAnchorEl(null);
+    dispatch({ type: "USER_LOGOUT" });
+    Cookies.remove("userInfo");
+    Cookies.remove("cartItems");
+    router.push("/");
   };
   return (
     <div>
@@ -100,6 +110,8 @@ function Layout({ title, description, children }) {
                 <>
                   <Button
                     className={classes.navbarButton}
+                    aria-controls="simple-menu"
+                    aria-hidden="true"
                     onClick={handleClick}
                   >
                     {userInfo.name}
@@ -113,7 +125,7 @@ function Layout({ title, description, children }) {
                   >
                     <MenuItem onClick={handleClose}>Profile</MenuItem>
                     <MenuItem onClick={handleClose}>My Account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
                   </Menu>
                 </>
               ) : (
