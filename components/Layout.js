@@ -14,6 +14,8 @@ import {
   Button,
   Badge,
   Switch,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 
 import useStyles from "../utils/styles";
@@ -21,8 +23,16 @@ import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 
 function Layout({ title, description, children }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const { state, dispatch } = useContext(Store);
-  const { darkMode, cart } = state;
+  const { darkMode, cart, userInfo } = state;
   const theme = createMuiTheme({
     typography: {
       h1: {
@@ -70,13 +80,6 @@ function Layout({ title, description, children }) {
             <div className={classes.grow}></div>
             <div>
               <Switch checked={darkMode} onChange={darkModeChangeHandler} />
-              <Button
-                onClick={darkModeChangeHandler}
-                color="secondary"
-                // variant={darkMode ? "outlined" : "contained"}
-              >
-                Switch Dark Mode
-              </Button>
 
               {/* <Switch checked={darkMode} onChange={darkModeChangeHandler} /> */}
               <NextLink href="/cart" passHref>
@@ -93,9 +96,31 @@ function Layout({ title, description, children }) {
                   )}
                 </Link>
               </NextLink>
-              <NextLink href="/login" passHref>
-                <Link>Login</Link>
-              </NextLink>
+              {userInfo ? (
+                <>
+                  <Button
+                    className={classes.navbarButton}
+                    onClick={handleClick}
+                  >
+                    {userInfo.name}
+                  </Button>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>My Account</MenuItem>
+                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <NextLink href="/login" passHref>
+                  <Link>Login</Link>
+                </NextLink>
+              )}
             </div>
           </Toolbar>
         </AppBar>
