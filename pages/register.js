@@ -18,7 +18,7 @@ import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 
-export default function Login() {
+export default function Register() {
   const {
     handleSubmit,
     control,
@@ -36,10 +36,19 @@ export default function Login() {
   }, []);
 
   const classes = useStyles();
-  const submitHandler = async ({ email, password }) => {
+  const submitHandler = async ({ name, email, password, confirmPassword }) => {
+    // e.preventDefault();
     closeSnackbar();
+    if (password !== confirmPassword) {
+      enqueueSnackbar("Passwords do not match", {
+        variant: "error",
+      });
+      // alert("Passwords do not match");
+      return;
+    }
     try {
-      const { data } = await axios.post("/api/users/login", {
+      const { data } = await axios.post("/api/users/register", {
+        name,
         email,
         password,
       });
@@ -54,15 +63,46 @@ export default function Login() {
           variant: "error",
         }
       );
+      // alert(err.message);
     }
   };
   return (
-    <Layout title="Login">
+    <Layout title="Register">
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography component="h1" variant="h1">
           Login
         </Typography>
         <List>
+          <ListItem>
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 3,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  inputProps={{ type: "name" }}
+                  error={Boolean(errors.name)}
+                  helperText={
+                    errors.name
+                      ? errors.name.type === "minLength"
+                        ? "Name is not valid"
+                        : "Name is required"
+                      : ""
+                  }
+                  // onChange={(e) => setEmail(e.target.value)}
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
+          </ListItem>
           <ListItem>
             <Controller
               name="email"
@@ -125,16 +165,46 @@ export default function Login() {
             ></Controller>
           </ListItem>
           <ListItem>
+            <Controller
+              name="confirmPassword"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 6,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  inputProps={{ type: "password" }}
+                  error={Boolean(errors.confirmPassword)}
+                  helperText={
+                    errors.confirmPassword
+                      ? errors.confirmPassword.type === "minLength"
+                        ? "Confirm Password is not valid"
+                        : "Confirm Password is required"
+                      : ""
+                  }
+                  // onChange={(e) => setEmail(e.target.value)}
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
+          </ListItem>
+          <ListItem>
             <Button variant="contained" type="submit" fullWidth color="primary">
               {" "}
-              Login{" "}
+              Register{" "}
             </Button>
           </ListItem>
 
           <ListItem>
-            Don&apos;t have an account? &nbsp;
-            <NextLink href={`/register?redirect=${redirect || "/"}`} passHref>
-              <Link> Register</Link>
+            Already have an account? &nbsp;
+            <NextLink href={`/login?redirect=${redirect || "/"}`} passHref>
+              <Link> Login</Link>
             </NextLink>
           </ListItem>
         </List>
