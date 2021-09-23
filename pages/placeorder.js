@@ -16,7 +16,7 @@ import {
   List,
 } from "@material-ui/core";
 import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Layout from "../components/Layout";
 import { Store } from "../utils/Store";
 import NextLink from "next/link";
@@ -24,6 +24,7 @@ import dynamic from "next/dynamic";
 import axios from "axios";
 import { useRouter } from "next/router";
 import useStyles from "../utils/styles";
+import CheckoutWizard from "../components/CheckoutWizard";
 
 function PlaceHolder() {
   const router = useRouter();
@@ -33,8 +34,23 @@ function PlaceHolder() {
     cart: { cartItems, shippingAddress, paymentMethod },
   } = state;
 
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; // round to 2 decimal places
+  const itemsPrice = round2(
+    cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
+  );
+  const shippingPrice = itemsPrice > 200 ? 0 : 15;
+  const taxPrice = round2(itemsPrice * 0.2);
+
+  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+
+  useEffect(() => {
+    if (!paymentMethod) {
+      router.push("/payment?redirect=/shipping");
+    }
+  }, []);
   return (
     <Layout title="Place Order">
+      <CheckoutWizard activeStep={3} />
       <Typography component="h1" variant="h1">
         Place Order
       </Typography>
@@ -121,6 +137,50 @@ function PlaceHolder() {
             <List>
               <ListItem>
                 <Typography variant="h2">Order Summary</Typography>
+              </ListItem>
+              <ListItem>
+                <Grid container spacing={1}>
+                  <Grid item md={6} xs={6}>
+                    <Typography>Items: </Typography>
+                  </Grid>
+                  <Grid item md={6} xs={6}>
+                    <Typography align="right">${itemsPrice}</Typography>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container spacing={1}>
+                  <Grid item md={6} xs={6}>
+                    <Typography>Tax: </Typography>
+                  </Grid>
+                  <Grid item md={6} xs={6}>
+                    <Typography align="right">${taxPrice}</Typography>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container spacing={1}>
+                  <Grid item md={6} xs={6}>
+                    <Typography>Shipping: </Typography>
+                  </Grid>
+                  <Grid item md={6} xs={6}>
+                    <Typography align="right">${shippingPrice}</Typography>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              <ListItem>
+                <Grid container spacing={1}>
+                  <Grid item md={6} xs={6}>
+                    <Typography>
+                      <strong>Total:</strong>{" "}
+                    </Typography>
+                  </Grid>
+                  <Grid item md={6} xs={6}>
+                    <Typography align="right">
+                      <strong>${totalPrice}</strong>
+                    </Typography>
+                  </Grid>
+                </Grid>
               </ListItem>
               <ListItem>
                 <Button variant="contained" color="primary">
