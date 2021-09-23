@@ -25,6 +25,7 @@ const useStyles = makeStyles({
   section: {
     marginTop: 10,
     marginBottom: 10,
+    padding: 10,
   },
   form: {
     maxWidth: 800,
