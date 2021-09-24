@@ -8,7 +8,7 @@ import {
   Typography,
   Container,
   Link,
-  createMuiTheme,
+  createTheme,
   ThemeProvider,
   CssBaseline,
   Button,
@@ -36,7 +36,7 @@ function Layout({ title, description, children }) {
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart, userInfo } = state;
   console.log(userInfo);
-  const theme = createMuiTheme({
+  const theme = createTheme({
     typography: {
       h1: {
         fontSize: "1.6rem",

@@ -8,15 +8,14 @@ import {
   TableCell,
   TableBody,
   Link,
-  Select,
-  MenuItem,
   Button,
   ListItem,
   Card,
   List,
+  CircularProgress,
 } from "@material-ui/core";
 import Image from "next/image";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { Store } from "../utils/Store";
 import NextLink from "next/link";
@@ -25,11 +24,15 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import useStyles from "../utils/styles";
 import CheckoutWizard from "../components/CheckoutWizard";
+import { useSnackbar } from "notistack";
+import {getError} from "../utils/error";
+import Cookies from "js-cookie";
 
 function PlaceHolder() {
   const router = useRouter();
   const classes = useStyles();
   const { state, dispatch } = useContext(Store);
+  const { userInfo } = state;
   const {
     cart: { cartItems, shippingAddress, paymentMethod },
   } = state;
@@ -47,7 +50,44 @@ function PlaceHolder() {
     if (!paymentMethod) {
       router.push("/payment?redirect=/shipping");
     }
+    if (cartItems.length === 0) {
+      router.push("/cart");
+    }
   }, []);
+
+  const { closeSnackbar, enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
+  const placeHolderHandler = async () => {
+    closeSnackbar();
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        '/api/orders',
+        {
+          orderItems: cartItems,
+          shippingAddress,
+          paymentMethod,
+          itemPrice:itemsPrice,
+          shippingPrice,
+          taxPrice,
+          totalPrice,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      dispatch({
+        type: "CART_CLEAR",
+      });
+      Cookies.remove("cartItems");
+      setLoading(false);
+      router.push(`/orders/${data._id}`);
+    } catch (e) {
+      enqueueSnackbar(getError(e), { variant: "error" });
+    }
+  };
   return (
     <Layout title="Place Order">
       <CheckoutWizard activeStep={3} />
@@ -183,10 +223,19 @@ function PlaceHolder() {
                 </Grid>
               </ListItem>
               <ListItem>
-                <Button variant="contained" color="primary">
+                <Button
+                  onClick={placeHolderHandler}
+                  variant="contained"
+                  color="primary"
+                >
                   Place Order
                 </Button>
               </ListItem>
+              {loading && (
+                <ListItem>
+                  <CircularProgress />
+                </ListItem>
+              )}
             </List>
           </Card>
         </Grid>
