@@ -30,7 +30,10 @@ function Layout({ title, description, children }) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (e, redirect) => {
+    if (redirect) {
+      router.push(redirect);
+    }
     setAnchorEl(null);
   };
   const { state, dispatch } = useContext(Store);
@@ -123,8 +126,20 @@ function Layout({ title, description, children }) {
                     open={open}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My Account</MenuItem>
+                    <MenuItem
+                      onClick={(e) => {
+                        handleClose(e, "/profile");
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem
+                      onClick={(e) => {
+                        handleClose(e, "/order-history");
+                      }}
+                    >
+                      Order History
+                    </MenuItem>
                     <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
                   </Menu>
                 </>
