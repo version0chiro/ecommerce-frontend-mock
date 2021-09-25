@@ -5,6 +5,7 @@ import "react-toggle/style.css";
 
 import { StoreProvider } from "../utils/Store";
 import { SnackbarProvider } from "notistack";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -17,7 +18,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <SnackbarProvider anchorOrigin={{ vertical: "top", horizontal: "center" }}>
       <StoreProvider>
-        <Component {...pageProps} />;
+        <PayPalScriptProvider deferLoading={true}>
+          <Component {...pageProps} />;
+        </PayPalScriptProvider>
       </StoreProvider>
     </SnackbarProvider>
   );
