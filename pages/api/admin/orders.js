@@ -15,6 +15,8 @@ handler.get(async (req, res) => {
 
   const orders = await Order.find({}).populate("user", "name");
 
+  await db.disconnect();
+
   res.send(orders);
 });
 
