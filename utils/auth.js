@@ -29,5 +29,12 @@ const isAuth = async (req, res, next) => {
     });
   }
 };
+const isAdmin = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return res.status(401).send("Access denied. No token provided");
+  } else {
+    next();
+  }
+};
 
-export { signToken, isAuth };
+export { signToken, isAuth, isAdmin };

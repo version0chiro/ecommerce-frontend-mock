@@ -18,6 +18,8 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
+
+import { Bar } from "react-chartjs-2";
 import useStyles from "../../utils/styles";
 
 function reducer(state, action) {
@@ -79,7 +81,7 @@ function AdminDashboard() {
           <Card className={classes.section}>
             <List>
               <NextLink href="/admin/dashboard" passHref>
-                <ListItem button component="a">
+                <ListItem selected button component="a">
                   <ListItemText primary="Admin Dashboard" />
                 </ListItem>
               </NextLink>
@@ -185,7 +187,26 @@ function AdminDashboard() {
                   Sales Chart
                 </Typography>
               </ListItem>
-              <ListItem></ListItem>
+              <ListItem>
+                <Bar
+                  data={{
+                    labels: summary.salesData.map((x) => x._id),
+                    datasets: [
+                      {
+                        label: "Sales",
+                        backgroundColor: "rgba(255,99,132,0.2)",
+                        data: summary.salesData.map((x) => x.totalSales),
+                      },
+                    ],
+                  }}
+                  options={{
+                    legend: {
+                      display: true,
+                      position: "right",
+                    },
+                  }}
+                />
+              </ListItem>
             </List>
           </Card>
         </Grid>
