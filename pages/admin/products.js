@@ -106,7 +106,7 @@ function AdminDashboard() {
     try {
       dispatch({ type: "CREATE_REQUEST" });
       const { data } = await axios.post(
-        `/api/admin/products`,
+        `/api/admin/product`,
         {},
         {
           headers: { authorization: `Bearer ${userInfo.token}` },
