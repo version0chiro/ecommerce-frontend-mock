@@ -177,16 +177,12 @@ function ProductEdit({ params }) {
     formData.append("image", file);
     try {
       dispatch({ type: `UPLOAD_REQUEST` });
-      const { data } = await axios.post(
-        `/api/admin/upload/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            authorization: `Bearer ${userInfo.token}`,
-          },
-        }
-      );
+      const { data } = await axios.post(`/api/admin/upload/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
       dispatch({ type: `UPLOAD_SUCCESS` });
       setValue("image", data.secure_url);
       enqueueSnackbar("Image uploaded successfully", { variant: "success" });
@@ -214,6 +210,11 @@ function ProductEdit({ params }) {
               <NextLink href="/admin/products" passHref>
                 <ListItem button component="a">
                   <ListItemText primary="Products" />
+                </ListItem>
+              </NextLink>
+              <NextLink href="/admin/users" passHref>
+                <ListItem  button component="a">
+                  <ListItemText primary="Users" />
                 </ListItem>
               </NextLink>
             </List>
