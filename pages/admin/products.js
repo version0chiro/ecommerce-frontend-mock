@@ -123,7 +123,7 @@ function AdminProducts() {
     }
   }, [successDelete]);
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const createHandler = async () => {
     if (!window.confirm("Are you sure?")) {
       return;
