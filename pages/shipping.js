@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
-import CheckoutWizard from "../components/checkoutWizard";
+import CheckoutWizard from "../components/CheckoutWizard";
 
 export default function Shipping() {
   const {
