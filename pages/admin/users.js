@@ -26,23 +26,22 @@ import {
 import useStyles from "../../utils/styles";
 import { useSnackbar } from "notistack";
 
-
 function reducer(state, action) {
   switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, users: action.payload, error: '' };
-    case 'FETCH_FAIL':
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, users: action.payload, error: "" };
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
 
-    case 'DELETE_REQUEST':
+    case "DELETE_REQUEST":
       return { ...state, loadingDelete: true };
-    case 'DELETE_SUCCESS':
+    case "DELETE_SUCCESS":
       return { ...state, loadingDelete: false, successDelete: true };
-    case 'DELETE_FAIL':
+    case "DELETE_FAIL":
       return { ...state, loadingDelete: false };
-    case 'DELETE_RESET':
+    case "DELETE_RESET":
       return { ...state, loadingDelete: false, successDelete: false };
     default:
       state;
@@ -58,7 +57,7 @@ function AdminUsers() {
     useReducer(reducer, {
       loading: true,
       users: [],
-      error: '',
+      error: "",
     });
 
   useEffect(() => {
@@ -88,19 +87,19 @@ function AdminUsers() {
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteHandler = async (userId) => {
-    if (!window.confirm('Are you sure?')) {
+    if (!window.confirm("Are you sure?")) {
       return;
     }
     try {
-      dispatch({ type: 'DELETE_REQUEST' });
+      dispatch({ type: "DELETE_REQUEST" });
       await axios.delete(`/api/admin/users/${userId}`, {
         headers: { authorization: `Bearer ${userInfo.token}` },
       });
-      dispatch({ type: 'DELETE_SUCCESS' });
-      enqueueSnackbar('User deleted successfully', { variant: 'success' });
+      dispatch({ type: "DELETE_SUCCESS" });
+      enqueueSnackbar("User deleted successfully", { variant: "success" });
     } catch (err) {
-      dispatch({ type: 'DELETE_FAIL' });
-      enqueueSnackbar(getError(err), { variant: 'error' });
+      dispatch({ type: "DELETE_FAIL" });
+      enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
   return (
@@ -177,7 +176,9 @@ function AdminUsers() {
                             <TableCell>{user._id}</TableCell>
                             <TableCell>{user.name}</TableCell>
                             <TableCell>{user.email}</TableCell>
-                            <TableCell>{user.isAdmin}</TableCell>
+                            <TableCell>
+                              {user.isAdmin==="true" ? "YES" : "NO"}
+                            </TableCell>
                             <TableCell>
                               <NextLink
                                 href={`/admin/user/${user._id}`}
